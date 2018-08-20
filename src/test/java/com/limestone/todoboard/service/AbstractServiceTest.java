@@ -21,13 +21,13 @@ public abstract class AbstractServiceTest extends TodoboardApplicationTests {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public void initTestData(String initFileName, Class<?> clazz) throws IOException {
-        File file = new ClassPathResource(initFileName).getFile();
-        List<Document> collect = Files.readAllLines(file.toPath())
+    public void initTestData(String initFile, Class<?> clazz) throws IOException {
+        File file = new ClassPathResource(initFile).getFile();
+        List<Document> entities = Files.readAllLines(file.toPath())
                 .stream()
                 .map(Document::parse)
                 .collect(Collectors.toList());
-        mongoTemplate.insert(collect, clazz);
+        mongoTemplate.insert(entities, clazz);
     }
 
     public void cleanUpTestData(Class<?> clazz) {

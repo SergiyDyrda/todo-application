@@ -11,7 +11,6 @@ import org.hibernate.validator.constraints.SafeHtml;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by Sergiy Dyrda on 17.08.2018
@@ -24,7 +23,7 @@ import java.util.List;
 public class UserTo implements Serializable {
 
     @NotEmpty
-    private String hexStringId;
+    private String id;
 
     @NotEmpty
     @SafeHtml

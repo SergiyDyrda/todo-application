@@ -35,7 +35,7 @@ public class AuthorizedUser extends org.springframework.security.core.userdetail
     }
 
     public static String id() {
-        return get().userTo.getHexStringId();
+        return get().userTo.getId();
     }
 
     public void update(UserTo newTo) {

@@ -1,7 +1,7 @@
 package com.limestone.todoboard.repository;
 
 import com.limestone.todoboard.domain.User;
-import org.bson.types.ObjectId;
+import com.mongodb.MongoClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -17,10 +17,13 @@ import java.util.Optional;
  */
 
 @Repository
-public class MongoUserRepository implements UserRepository<ObjectId> {
+public class MongoUserRepository implements UserRepository<String> {
 
     private final MongoSpringDataUserRepository innerRepository;
     private final MongoTemplate mongoTemplate;
+
+    @Autowired
+    private MongoClient client;
 
     @Autowired
     public MongoUserRepository(MongoSpringDataUserRepository repository, MongoTemplate mongoTemplate) {
@@ -30,23 +33,37 @@ public class MongoUserRepository implements UserRepository<ObjectId> {
 
     @Override
     public User save(User user) {
-        if (!user.isNew() && get(new ObjectId(user.getId())) == null) {
+        if (!user.isNew() && !exists(user.getId())) {
             return null;
         }
         return innerRepository.save(user);
     }
 
     @Override
-    public boolean delete(ObjectId id) {
-        return innerRepository.deleteUserById(id) != 0;
+    public boolean delete(String id) {
+        if (!exists(id)) return false;
+        innerRepository.deleteById(id);
+        return true;
     }
 
     @Override
-    public Optional<User> get(ObjectId id) {
-        return Optional.ofNullable(
-                mongoTemplate.findById(id.toString(), User.class)
-        );
+    public Optional<User> get(String id) {
+        Query query = Query.query(Criteria.where("_id").is(id));
+        User user = mongoTemplate.findOne(query, User.class, "users");
+        return Optional.ofNullable(user);
 //        return innerRepository.findById(id);
+//        MongoDatabase todoboard = client.getDatabase("todoboard");
+//        MongoCollection<Document> users = todoboard.getCollection("users");
+//        Document document = users.find(eq("_id", id)).first();
+//        if (document != null) {
+//            User user = new User();
+//            user.setId(document.getString("_id"));
+//            user.setName(document.getString("name"));
+//            user.setEmail(document.getString("email"));
+//            return Optional.of(user);
+//        }  else {
+//            return Optional.empty();
+//        }
     }
 
     @Override
@@ -60,14 +77,19 @@ public class MongoUserRepository implements UserRepository<ObjectId> {
     }
 
     @Override
-    public void addTicketId(Object ticketId, ObjectId userId) {
+    public boolean exists(String userId) {
+        return innerRepository.existsById(userId);
+    }
+
+    @Override
+    public void addTicketId(Object ticketId, String userId) {
         mongoTemplate.updateFirst(
                 Query.query(Criteria.where("_id").is(userId)),
                 new Update().push("ticketIds", ticketId), User.class);
     }
 
     @Override
-    public void removeTicketId(Object ticketId, ObjectId userId) {
+    public void removeTicketId(Object ticketId, String userId) {
         mongoTemplate.updateFirst(
                 Query.query(Criteria.where("_id").is(userId)),
                 new Update().pull("ticketIds", ticketId), User.class);

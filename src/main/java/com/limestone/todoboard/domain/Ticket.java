@@ -2,7 +2,6 @@ package com.limestone.todoboard.domain;
 
 
 import lombok.*;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,10 +17,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @EqualsAndHashCode
 @ToString
 @Document(collection = "tickets")
-public class Ticket implements Persistable<ObjectId> {
+public class Ticket implements Persistable<String> {
 
     @Id
-    private ObjectId id;
+    private String id;
     private String name, description;
     private TicketStatus status;
 

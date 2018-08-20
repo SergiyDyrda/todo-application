@@ -18,5 +18,5 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class TicketTo implements Serializable {
     @SafeHtml
-    private String hexStringId, name, description, status;
+    private String id, name, description, status;
 }

@@ -1,7 +1,6 @@
 package com.limestone.todoboard.repository;
 
 import com.limestone.todoboard.domain.Ticket;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +12,7 @@ import java.util.Optional;
  */
 
 @Repository
-public class MongoTicketRepository implements TicketRepository<ObjectId> {
+public class MongoTicketRepository implements TicketRepository<String> {
 
     private final MongoSpringDataTicketRepository innerRepository;
 
@@ -24,19 +23,21 @@ public class MongoTicketRepository implements TicketRepository<ObjectId> {
 
     @Override
     public Ticket save(Ticket ticket) {
-        if (!ticket.isNew() && get(ticket.getId()) == null) {
+        if (!ticket.isNew() && !innerRepository.existsById(ticket.getId())) {
             return null;
         }
         return innerRepository.save(ticket);
     }
 
     @Override
-    public boolean delete(ObjectId id) {
-        return innerRepository.deleteTicketById(id) != 0;
+    public boolean delete(String id) {
+        if (!innerRepository.existsById(id)) return false;
+        innerRepository.deleteById(id);
+        return true;
     }
 
     @Override
-    public Optional<Ticket> get(ObjectId id) {
+    public Optional<Ticket> get(String id) {
         return innerRepository.findById(id);
     }
 
@@ -46,12 +47,12 @@ public class MongoTicketRepository implements TicketRepository<ObjectId> {
     }
 
     @Override
-    public List<Ticket> getTicketsByIds(List<ObjectId> objectIds) {
-        return innerRepository.findTicketsByIdIn(objectIds);
+    public List<Ticket> getTicketsByIds(List<String> ticketIds) {
+        return innerRepository.findTicketsByIdIn(ticketIds);
     }
 
     @Override
-    public int deleteAll(List<ObjectId> ticketIds) {
+    public int deleteAll(List<String> ticketIds) {
         return innerRepository.deleteTicketsByIdIn(ticketIds);
     }
 

@@ -1,7 +1,6 @@
 package com.limestone.todoboard.domain;
 
 import lombok.*;
-import org.bson.types.ObjectId;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.data.annotation.Id;
@@ -45,12 +44,16 @@ public class User implements Persistable<String> {
     @SafeHtml
     private String password;
 
-    private List<ObjectId> ticketIds;
+    private List<String> ticketIds;
 
     private Set<Role> roles;
 
-    public User(ObjectId id, String name, String email, String password) {
-        this(id.toString(), name, email, password, Collections.emptyList(), EnumSet.of(Role.ROLE_USER));
+    public User(String name, String email, String password) {
+        this(null, name, email, password, Collections.emptyList(), EnumSet.of(Role.ROLE_USER));
+    }
+
+    public User(String id, String name, String email, String password) {
+        this(id, name, email, password, Collections.emptyList(), EnumSet.of(Role.ROLE_USER));
     }
 
     @Override

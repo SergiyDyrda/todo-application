@@ -22,6 +22,8 @@ public interface UserRepository<ID> {
 
     List<User> getAll();
 
+    boolean exists(ID userId);
+
     void addTicketId(Object ticketId, ID userId);
 
     void removeTicketId(Object ticketId, ID userId);

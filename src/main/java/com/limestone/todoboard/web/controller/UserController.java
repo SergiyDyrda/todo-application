@@ -4,7 +4,6 @@ import com.limestone.todoboard.AuthorizedUser;
 import com.limestone.todoboard.dto.UserTo;
 import com.limestone.todoboard.service.UserService;
 import com.limestone.todoboard.util.AuthenticationUtil;
-import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +28,16 @@ public class UserController {
 
     public static final String USER_URL = "/user";
 
-    private final UserService<ObjectId> userService;
+    private final UserService<String> userService;
 
     @Autowired
-    public UserController(UserService<ObjectId> userService) {
+    public UserController(UserService<String> userService) {
         this.userService = userService;
     }
 
     @PutMapping
     public ResponseEntity updateAccount(@Valid @RequestBody UserTo userTo) {
-        LOGGER.info("update account: {}", userTo.getHexStringId());
+        LOGGER.info("update account: {}", userTo.getId());
         userService.update(asUser(userTo));
         AuthorizedUser.get().update(userTo);
 

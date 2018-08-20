@@ -3,7 +3,6 @@ package com.limestone.todoboard.service;
 
 import com.limestone.todoboard.domain.User;
 import com.limestone.todoboard.util.exception.NotFoundException;
-import org.bson.types.ObjectId;
 
 import java.util.List;
 
@@ -25,5 +24,5 @@ public interface UserService<ID> {
 
     void addTicketId(Object ticketId, ID userId);
 
-    void removeTicketId(Object ticketId, ObjectId userId);
+    void removeTicketId(Object ticketId, ID userId);
 }
