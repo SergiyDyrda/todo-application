@@ -35,8 +35,6 @@ public class MongoTicketServiceTest extends AbstractServiceTest {
 
     @Test
     public void save() {
-//        userService.getAll().forEach(System.out::println);
-//        System.out.println(userService.get(petia.getId()));
         Ticket newTicket = new Ticket("new ticket", "new ticket description", TicketStatus.TODO);
         Ticket saved = ticketService.save(newTicket, petia.getId());
         System.out.println(saved);

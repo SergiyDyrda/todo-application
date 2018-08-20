@@ -42,6 +42,7 @@ public class User implements Persistable<String> {
     @Length(min = 5)
     @NotEmpty
     @SafeHtml
+    @EqualsAndHashCode.Exclude
     private String password;
 
     private List<String> ticketIds;

@@ -47,7 +47,7 @@ public class UserController {
     @DeleteMapping
     public ResponseEntity deleteAccount(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.info("delete account: {}", AuthorizedUser.id());
-        userService.deleteWithTickets(asUser(AuthorizedUser.get().getUserTo()));
+        userService.deleteWithTickets(AuthorizedUser.id());
         AuthenticationUtil.manualLogout(request, response);
 
         //TODO redirect to login

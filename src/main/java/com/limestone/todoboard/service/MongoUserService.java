@@ -17,6 +17,7 @@ import java.util.List;
 
 import static com.limestone.todoboard.util.ExceptionUtil.checkNotFoundWithId;
 import static com.limestone.todoboard.util.UserUtil.prepareToSave;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Created by Sergiy Dyrda on 18.08.2018
@@ -74,9 +75,10 @@ public class MongoUserService implements UserService<String>, UserDetailsService
     }
 
     @Override
-    public void deleteWithTickets(User user)  throws NotFoundException {
-        Assert.notNull(user, "user must not be null");
-        ticketRepository.deleteAll(user.getTicketIds());
+    public void deleteWithTickets(String userId)  throws NotFoundException {
+        Assert.notNull(userId, "userId must not be null");
+        User user = get(userId);
+        ticketRepository.deleteAll(requireNonNull(user.getTicketIds()));
         delete(user.getId());
     }
 

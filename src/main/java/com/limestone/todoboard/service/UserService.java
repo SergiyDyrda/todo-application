@@ -20,7 +20,7 @@ public interface UserService<ID> {
 
     void update(User user);
 
-    void deleteWithTickets(User user) throws NotFoundException;
+    void deleteWithTickets(String userId) throws NotFoundException;
 
     void addTicketId(Object ticketId, ID userId);
 

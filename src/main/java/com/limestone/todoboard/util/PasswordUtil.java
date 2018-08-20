@@ -32,4 +32,13 @@ public class PasswordUtil {
     public static boolean isEncoded(String newPassword) {
         return BCRYPT_PATTERN.matcher(newPassword).matches();
     }
+
+    public static boolean comparePassword(String rawOrEncodedPassword, String password) {
+        if (PasswordUtil.isEncoded(rawOrEncodedPassword)) {
+            return rawOrEncodedPassword.equals(password);
+        } else if (!PasswordUtil.isMatch(rawOrEncodedPassword, password)) {
+            return false;
+        }
+        return true;
+    }
 }
