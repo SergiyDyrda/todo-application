@@ -2,6 +2,7 @@ package com.limestone.todoboard.repository;
 
 import com.limestone.todoboard.domain.User;
 import com.mongodb.MongoClient;
+import com.mongodb.client.result.UpdateResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -82,16 +83,18 @@ public class MongoUserRepository implements UserRepository<String> {
     }
 
     @Override
-    public void addTicketId(Object ticketId, String userId) {
-        mongoTemplate.updateFirst(
+    public boolean addTicketId(Object ticketId, String userId) {
+        UpdateResult updateResult = mongoTemplate.updateFirst(
                 Query.query(Criteria.where("_id").is(userId)),
                 new Update().push("ticketIds", ticketId), User.class);
+        return updateResult.getModifiedCount() != 0;
     }
 
     @Override
-    public void removeTicketId(Object ticketId, String userId) {
-        mongoTemplate.updateFirst(
+    public boolean removeTicketId(Object ticketId, String userId) {
+        UpdateResult updateResult = mongoTemplate.updateFirst(
                 Query.query(Criteria.where("_id").is(userId)),
                 new Update().pull("ticketIds", ticketId), User.class);
+        return updateResult.getModifiedCount() != 0;
     }
 }

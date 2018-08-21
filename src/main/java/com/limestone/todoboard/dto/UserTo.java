@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.SafeHtml;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
@@ -22,19 +23,18 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class UserTo implements Serializable {
 
-    @NotEmpty
     private String id;
 
-    @NotEmpty
     @SafeHtml
+    @NotBlank(message = "*Please provide your name")
     private String name;
 
     @Email
-    @NotEmpty
+    @NotBlank(message = "*Please provide your email")
     @SafeHtml
     private String email;
 
-    @Length(min = 5)
+    @Length(min = 5, max = 64)
     @NotEmpty
     @SafeHtml
     private String password;

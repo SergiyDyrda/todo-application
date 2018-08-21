@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:include="fragments/header :: headTag"></div>
+    <title>Your tickets</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/tickets.css}"/>
+
+    <script th:src="@{/js/datatableUtil.js}" defer></script>
+
+</head>
+<body>
+<div th:include="fragments/bodyHeader :: bodyHeader"></div>
+
+<h1 class="text-center">Your tickets</h1>
+<div class="container">
+
+    <a class="btn btn-primary" onclick="add()">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        Add
+    </a>
+    <br/> <br/>
+    <div class="row-fluid">
+
+        <!--todoT-->
+        <div class="col-md-4 span4">
+            <div th:onclick="'updateRow(' + ${ticket.id} + ');'" th:each="ticket : ${todo}" class="our-team-main">
+
+
+                <div class="team-front">
+                    <img src="http://placehold.it/110x110/9c27b0/fff?text=Dilip" class="img-fluid"/>
+                    <h3 th:text="${ticket.name}"></h3>
+                </div>
+
+                <div class="team-back">
+                    <span th:text="${ticket.description}"></span>
+                    <a class="del-button" th:onclick="'deleteRow(' + ${ticket.id} + ');'">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        <!--todoT-->
+
+        <!--inProgress-->
+        <div class="col-md-4 span4">
+            <div th:onclick="'updateRow(' + ${ticket.id} + ');'" th:each="ticket : ${inProgress}" class="our-team-main">
+
+                <div class="team-front">
+                    <img src="http://placehold.it/110x110/336699/fff?text=Dilip" class="img-fluid"/>
+                    <h3 th:text="${ticket.name}"></h3>
+                </div>
+
+                <div class="team-back">
+                    <span th:text="${ticket.description}"></span>
+                    <a class="del-button" th:onclick="'deleteRow(' + ${ticket.id} + ');'">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        <!--inProgress-->
+
+        <!--completed-->
+        <div class="col-md-4 span4">
+            <div th:onclick="'updateRow(' + ${ticket.id} + ');'" th:each="ticket : ${completed}" class="our-team-main">
+
+                <div class="team-front">
+                    <img src="http://placehold.it/110x110/607d8b/fff?text=Dilip" class="img-fluid"/>
+                    <h3 th:text="${ticket.name}"></h3>
+                </div>
+
+                <div class="team-back">
+                    <span th:text="${ticket.description}"></span>
+                    <a class="del-button" th:onclick="'deleteRow(' + ${ticket.id} + ');'">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        <!--completed-->
+        <script>
+            makeEditable()
+        </script>
+    </div>
+</div>
+
+<div class="modal fade" id="editRow">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h2 class="modal-title" id="modalTitle"></h2>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="detailsForm">
+                    <input type="hidden" id="id" name="id">
+
+                    <div class="form-group">
+                        <label for="name" class="control-label col-xs-3">Name</label>
+
+                        <div class="col-xs-9">
+                            <input type="text" class="form-control" id="name" name="name"
+                                   placeholder="Enter name"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description" class="control-label col-xs-3">Description</label>
+
+                        <div class="col-xs-9">
+                            <input type="text" class="form-control" id="description" name="description"
+                                   placeholder="Enter description"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="status" class="control-label col-xs-3">Status</label>
+
+                        <div class="col-xs-9">
+                            <select class="form-control" id="status" name="status">
+                                <option value="TODO" selected="selected">TODO</option>
+                                <option value="IN_PROGRESS">In progress</option>
+                                <option value="COMPLETED">Completed</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-offset-3 col-xs-9">
+                            <button class="btn btn-primary" type="button" onclick="save()">
+                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

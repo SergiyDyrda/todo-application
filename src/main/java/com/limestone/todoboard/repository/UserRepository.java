@@ -24,7 +24,7 @@ public interface UserRepository<ID> {
 
     boolean exists(ID userId);
 
-    void addTicketId(Object ticketId, ID userId);
+    boolean addTicketId(Object ticketId, ID userId);
 
-    void removeTicketId(Object ticketId, ID userId);
+    boolean removeTicketId(Object ticketId, ID userId);
 }

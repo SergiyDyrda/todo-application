@@ -18,11 +18,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ValidationException;
 
-/**
- * Created on 07.09.2017.
- *
- * @author Sergiy Dyrda
- */
+
 
 @RestControllerAdvice(annotations = {Controller.class, RestController.class})
 @Order(Ordered.HIGHEST_PRECEDENCE + 5)

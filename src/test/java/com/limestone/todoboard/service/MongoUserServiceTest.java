@@ -4,7 +4,6 @@ import com.limestone.todoboard.domain.Ticket;
 import com.limestone.todoboard.domain.TicketStatus;
 import com.limestone.todoboard.domain.User;
 import com.limestone.todoboard.util.exception.NotFoundException;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +26,7 @@ public class MongoUserServiceTest extends AbstractServiceTest {
 
     @Before
     public void initTestData() throws Exception {
-        super.initTestData("users-testdata.json", User.class);
-        super.initTestData("tickets-testdata.json", Ticket.class);
+        super.initTestData();
     }
 
     @Test
@@ -69,7 +67,6 @@ public class MongoUserServiceTest extends AbstractServiceTest {
         copyVasia.setName("new Name");
         copyVasia.setEmail("updatedEmail");
         userService.update(copyVasia);
-//        assertTrue(USER_MODEL_MATCHER.match(copyVasia, userService.get(vasia.getId())));
         User newVasia = userService.get(vasia.getId());
         assertEquals(copyVasia, newVasia);
     }
@@ -97,10 +94,4 @@ public class MongoUserServiceTest extends AbstractServiceTest {
         assertEquals(Collections.singletonList(vasia_ticket_1), ticketService.getUserTickets(vasia.getId()));
     }
 
-
-    @After
-    public void cleanUpTestData() throws Exception {
-        super.cleanUpTestData(Ticket.class);
-        super.cleanUpTestData(User.class);
-    }
 }

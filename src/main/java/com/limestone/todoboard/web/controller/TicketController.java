@@ -4,17 +4,21 @@ import com.limestone.todoboard.AuthorizedUser;
 import com.limestone.todoboard.domain.Ticket;
 import com.limestone.todoboard.dto.TicketTo;
 import com.limestone.todoboard.service.TicketService;
-import com.limestone.todoboard.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
+import static com.limestone.todoboard.domain.TicketStatus.COMPLETED;
+import static com.limestone.todoboard.domain.TicketStatus.IN_PROGRESS;
+import static com.limestone.todoboard.domain.TicketStatus.TODO;
 import static com.limestone.todoboard.util.TicketUtil.*;
 import static com.limestone.todoboard.web.controller.TicketController.TICKET_URL;
 
@@ -30,19 +34,49 @@ public class TicketController {
     public static final String TICKET_URL = "/tickets";
 
     private final TicketService<String> ticketService;
-    private final UserService<String> userService;
 
     @Autowired
-    public TicketController(TicketService<String> ticketService, UserService<String> userService) {
+    public TicketController(TicketService<String> ticketService) {
         this.ticketService = ticketService;
-        this.userService = userService;
     }
 
-    @GetMapping
+    @GetMapping("/temporary")
     public List<TicketTo> getUserTickets() {
         LOGGER.info("get all tickets");
         List<Ticket> userTickets = ticketService.getUserTickets(AuthorizedUser.id());
         return getListTicketTo(userTickets);
+    }
+
+    @GetMapping
+    public ModelAndView getUserTicketsTemporary() {
+        LOGGER.info("get all tickets");
+        ModelAndView mv = new ModelAndView("tickets");
+        List<Ticket> userTickets = ticketService.getUserTickets(AuthorizedUser.id());
+        divideTicketsByStatusAndSetToView(getListTicketTo(userTickets), mv);
+        return mv;
+    }
+
+    private void divideTicketsByStatusAndSetToView(List<TicketTo> tickets, ModelAndView modelAndView) {
+        List<TicketTo> todo = new ArrayList<>();
+        List<TicketTo> inProgress = new ArrayList<>();
+        List<TicketTo> completed = new ArrayList<>();
+        final String todoStr = TODO.name();
+        final String inProgressStr = IN_PROGRESS.name();
+        final String completedStr = COMPLETED.name();
+        tickets.forEach(t -> {
+            if (t.getStatus().equals(todoStr)) {
+                    todo.add(t);
+            } else if (t.getStatus().equals(inProgressStr)) {
+                inProgress.add(t);
+            } else if (t.getStatus().equals(completedStr)) {
+                completed.add(t);
+            }
+        });
+
+        modelAndView.addObject("todo", todo);
+        modelAndView.addObject("inProgress", inProgress);
+        modelAndView.addObject("completed", completed);
+
     }
 
     @GetMapping("/{ticketId}")

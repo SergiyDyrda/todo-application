@@ -43,9 +43,8 @@ public class MongoTicketService implements TicketService<String> {
     public void delete(String ticketId, String userId) throws NotFoundException {
         Assert.notNull(ticketId, "ticketId must not be null");
         Assert.notNull(ticketId, "userId must not be null");
+        checkNotFoundWithId(userRepository.removeTicketId(ticketId, userId), userId);
         checkNotFoundWithId(ticketRepository.delete(ticketId), ticketId);
-        checkNotFoundWithId(userRepository.exists(userId), userId);
-        userRepository.removeTicketId(ticketId, userId);
     }
 
     @Override

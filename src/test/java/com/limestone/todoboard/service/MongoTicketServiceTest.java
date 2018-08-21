@@ -2,29 +2,28 @@ package com.limestone.todoboard.service;
 
 import com.limestone.todoboard.domain.Ticket;
 import com.limestone.todoboard.domain.TicketStatus;
-import com.limestone.todoboard.domain.User;
 import com.limestone.todoboard.util.exception.NotFoundException;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
+import static com.limestone.todoboard.TicketTestData.*;
 import static com.limestone.todoboard.UserTestData.petia;
+import static com.limestone.todoboard.UserTestData.vasia;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class MongoTicketServiceTest extends AbstractServiceTest {
 
     @Autowired
     private MongoTicketService ticketService;
 
-    @Autowired
-    private MongoUserService userService;
-
     @Before
-    public void initTestData() throws IOException {
-        super.initTestData("tickets-testdata.json", Ticket.class);
-        super.initTestData("users-testdata.json", User.class);
+    public void initTestData() throws Exception {
+        super.initTestData();
     }
 
     @Test(expected = NotFoundException.class)
@@ -37,46 +36,44 @@ public class MongoTicketServiceTest extends AbstractServiceTest {
     public void save() {
         Ticket newTicket = new Ticket("new ticket", "new ticket description", TicketStatus.TODO);
         Ticket saved = ticketService.save(newTicket, petia.getId());
-        System.out.println(saved);
-        System.out.println(saved.getId().getClass());
-        System.out.println(saved.getId());
-        Ticket ticket = ticketService.get(saved.getId());
-        ticketService.get("5b79c14d4488e92fc4620167");
-        System.out.println(ticket);
-//        List<Ticket> userTickets = ticketService.getUserTickets(petia.getId());
-//        assertTrue(userTickets.contains(saved));
+        List<Ticket> userTickets = ticketService.getUserTickets(petia.getId());
+        assertTrue(userTickets.contains(saved));
     }
 
     @Test
     public void delete() {
+        ticketService.delete(petia_ticket_3.getId(), petia.getId());
+        assertEquals(Arrays.asList(petia_ticket_1, petia_ticket_2), ticketService.getUserTickets(petia.getId()));
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void deleteNotFound() {
+        ticketService.delete(petia_ticket_3.getId(), vasia.getId());
     }
 
     @Test
     public void get() {
-        ticketService.get("5b79c14d4488e92fc4620165");
+        Ticket ticket_1 = ticketService.get(vasia_ticket_1.getId());
+        assertEquals(vasia_ticket_1, ticket_1);
+
+        Ticket ticket_2 = ticketService.get(petia_ticket_2.getId());
+        assertEquals(petia_ticket_2, ticket_2);
+
     }
 
     @Test
     public void update() {
-    }
-
-    @Test
-    public void getAll() {
-        ticketService.getAll().stream().findFirst().ifPresent(t -> {
-            System.out.println(t.getClass());
-            System.out.println(t.getId());
-            System.out.println(t.getId().getClass());
-            ticketService.get(t.getId());
-        });
+        Ticket ticket = ticketService.get(vasia_ticket_2.getId());
+        ticket.setDescription("new updated description");
+        ticketService.update(ticket);
+        assertEquals(ticket, ticketService.get(vasia_ticket_2.getId()));
     }
 
     @Test
     public void getUserTickets() {
-    }
-
-    @After
-    public void cleanUpTestData() {
-        super.cleanUpTestData(Ticket.class);
-        super.cleanUpTestData(User.class);
+        assertEquals(Arrays.asList(vasia_ticket_1, vasia_ticket_2),
+                ticketService.getUserTickets(vasia.getId()));
+        assertEquals(Arrays.asList(petia_ticket_1, petia_ticket_2, petia_ticket_3),
+                ticketService.getUserTickets(petia.getId()));
     }
 }
