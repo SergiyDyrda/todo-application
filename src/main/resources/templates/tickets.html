@@ -30,11 +30,11 @@
 
                 <div class="team-front">
                     <img src="http://placehold.it/110x110/9c27b0/fff?text=Dilip" class="img-fluid"/>
-                    <h3 th:text="${ticket.name}"></h3>
+                    <h3 th:text="${ticket.description}"></h3>
                 </div>
 
                 <div class="team-back">
-                    <span th:text="${ticket.description}"></span>
+                    <span th:text="${ticket.name}"></span>
                     <a class="del-button" th:onclick="'deleteRow(' + ${ticket.id} + ');'">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     </a>
@@ -50,11 +50,11 @@
 
                 <div class="team-front">
                     <img src="http://placehold.it/110x110/336699/fff?text=Dilip" class="img-fluid"/>
-                    <h3 th:text="${ticket.name}"></h3>
+                    <h3 th:text="${ticket.description}"></h3>
                 </div>
 
                 <div class="team-back">
-                    <span th:text="${ticket.description}"></span>
+                    <span th:text="${ticket.name}"></span>
                     <a class="del-button" th:onclick="'deleteRow(' + ${ticket.id} + ');'">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     </a>
@@ -70,11 +70,11 @@
 
                 <div class="team-front">
                     <img src="http://placehold.it/110x110/607d8b/fff?text=Dilip" class="img-fluid"/>
-                    <h3 th:text="${ticket.name}"></h3>
+                    <h3 th:text="${ticket.description}"></h3>
                 </div>
 
                 <div class="team-back">
-                    <span th:text="${ticket.description}"></span>
+                    <span th:text="${ticket.name}"></span>
                     <a class="del-button" th:onclick="'deleteRow(' + ${ticket.id} + ');'">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     </a>

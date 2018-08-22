@@ -26,6 +26,11 @@ public class MongoTicketServiceTest extends AbstractServiceTest {
         super.initTestData();
     }
 
+    @Test
+    public void name() {
+        System.out.println();
+    }
+
     @Test(expected = NotFoundException.class)
     public void saveNotFound() {
         Ticket newTicket = new Ticket("mock-id", "new ticket", "new ticket description", TicketStatus.TODO);
@@ -71,7 +76,7 @@ public class MongoTicketServiceTest extends AbstractServiceTest {
 
     @Test
     public void getUserTickets() {
-        assertEquals(Arrays.asList(vasia_ticket_1, vasia_ticket_2),
+        assertEquals(Arrays.asList(vasia_ticket_1, vasia_ticket_2, vasia_ticket_3),
                 ticketService.getUserTickets(vasia.getId()));
         assertEquals(Arrays.asList(petia_ticket_1, petia_ticket_2, petia_ticket_3),
                 ticketService.getUserTickets(petia.getId()));

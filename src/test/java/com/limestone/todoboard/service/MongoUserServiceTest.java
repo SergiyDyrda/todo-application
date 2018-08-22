@@ -91,7 +91,7 @@ public class MongoUserServiceTest extends AbstractServiceTest {
     @Test
     public void removeTicketId() {
         userService.removeTicketId(vasia_ticket_2.getId(), vasia.getId());
-        assertEquals(Collections.singletonList(vasia_ticket_1), ticketService.getUserTickets(vasia.getId()));
+        assertEquals(Arrays.asList(vasia_ticket_1, vasia_ticket_3), ticketService.getUserTickets(vasia.getId()));
     }
 
 }

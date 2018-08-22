@@ -23,9 +23,10 @@ public class UserTestData {
             "petya@mail.com",
             PasswordUtil.encode("petia-password"),
             Arrays.asList(
-                    "5b79c14d4488e92fc4620165",
-                    "5b79c14d4488e92fc4620166",
-                    "5b79c14d4488e92fc4620167"
+                    "5b79c14d4488e92fc4620174",
+                    "5b79c14d4488e92fc4620167",
+                    "5b79c14d4488e92fc462016a"
+
             ),
             EnumSet.of(Role.ROLE_USER)
     );
@@ -36,8 +37,9 @@ public class UserTestData {
             "vasia@mail.com",
             PasswordUtil.encode("vasia-password"),
             Arrays.asList(
-                    "5b79c14d4488e92fc4620168",
-                    "5b79c14d4488e92fc4620169"
+                    "5b79c14d4488e92fc4620177",
+                    "5b79c14d4488e92fc4620178",
+                    "5b79c14d4488e92fc4620179"
             ),
             EnumSet.of(Role.ROLE_USER)
     );
