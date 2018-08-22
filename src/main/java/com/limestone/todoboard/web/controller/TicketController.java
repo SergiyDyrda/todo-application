@@ -12,13 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.limestone.todoboard.domain.TicketStatus.COMPLETED;
-import static com.limestone.todoboard.domain.TicketStatus.IN_PROGRESS;
-import static com.limestone.todoboard.domain.TicketStatus.TODO;
+import static com.limestone.todoboard.domain.TicketStatus.*;
 import static com.limestone.todoboard.util.TicketUtil.*;
 import static com.limestone.todoboard.web.controller.TicketController.TICKET_URL;
 
@@ -40,15 +39,8 @@ public class TicketController {
         this.ticketService = ticketService;
     }
 
-    @GetMapping("/temporary")
-    public List<TicketTo> getUserTickets() {
-        LOGGER.info("get all tickets");
-        List<Ticket> userTickets = ticketService.getUserTickets(AuthorizedUser.id());
-        return getListTicketTo(userTickets);
-    }
-
     @GetMapping
-    public ModelAndView getUserTicketsTemporary() {
+    public ModelAndView getUserTickets() {
         LOGGER.info("get all tickets");
         ModelAndView mv = new ModelAndView("tickets");
         List<Ticket> userTickets = ticketService.getUserTickets(AuthorizedUser.id());
@@ -65,7 +57,7 @@ public class TicketController {
         final String completedStr = COMPLETED.name();
         tickets.forEach(t -> {
             if (t.getStatus().equals(todoStr)) {
-                    todo.add(t);
+                todo.add(t);
             } else if (t.getStatus().equals(inProgressStr)) {
                 inProgress.add(t);
             } else if (t.getStatus().equals(completedStr)) {
@@ -86,30 +78,25 @@ public class TicketController {
     }
 
     @PostMapping
-    public ResponseEntity<TicketTo> createTicket(@RequestBody TicketTo ticketTo) {
-        LOGGER.info("create ticket {} with status {}", ticketTo.getName(), ticketTo.getStatus());
-
-        Ticket created = ticketService.save(asTicket(ticketTo), AuthorizedUser.id());
-
-        if (created == null) {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<TicketTo> createOrUpdateTicket(@Valid TicketTo ticketTo) {
+        Ticket nativeTicket = asTicket(ticketTo);
+        if (nativeTicket.isNew()) {
+            nativeTicket.setId(null);
+            LOGGER.info("create ticket {} with status {}", ticketTo.getName(), ticketTo.getStatus());
+            Ticket created = ticketService.save(nativeTicket, AuthorizedUser.id());
+            if (created == null) {
+                return ResponseEntity.badRequest().build();
+            }
+            URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path(TICKET_URL + "/{id}")
+                    .buildAndExpand(created.getId())
+                    .toUri();
+            return ResponseEntity.created(uriOfNewResource).body(asTicketTo(created));
+        } else {
+            LOGGER.info("update ticket {}", ticketTo.getId());
+            ticketService.update(asTicket(ticketTo));
+            return ResponseEntity.ok().build();
         }
-
-        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(TICKET_URL + "/{id}")
-                .buildAndExpand(created.getId())
-                .toUri();
-
-        return ResponseEntity.created(uriOfNewResource).body(asTicketTo(created));
-    }
-
-
-    @PutMapping
-    public ResponseEntity<TicketTo> updateTicket(@RequestBody TicketTo ticketTo) {
-        LOGGER.info("update ticket {}", ticketTo.getId());
-        ticketService.update(asTicket(ticketTo));
-
-        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{ticketId}")

@@ -49,22 +49,7 @@ public class MongoUserRepository implements UserRepository<String> {
 
     @Override
     public Optional<User> get(String id) {
-        Query query = Query.query(Criteria.where("_id").is(id));
-        User user = mongoTemplate.findOne(query, User.class, "users");
-        return Optional.ofNullable(user);
-//        return innerRepository.findById(id);
-//        MongoDatabase todoboard = client.getDatabase("todoboard");
-//        MongoCollection<Document> users = todoboard.getCollection("users");
-//        Document document = users.find(eq("_id", id)).first();
-//        if (document != null) {
-//            User user = new User();
-//            user.setId(document.getString("_id"));
-//            user.setName(document.getString("name"));
-//            user.setEmail(document.getString("email"));
-//            return Optional.of(user);
-//        }  else {
-//            return Optional.empty();
-//        }
+        return innerRepository.findById(id);
     }
 
     @Override

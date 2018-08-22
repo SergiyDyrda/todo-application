@@ -32,6 +32,6 @@ public class Ticket implements Persistable<String> {
 
     @Override
     public boolean isNew() {
-        return id == null;
+        return id == null || id.isEmpty();
     }
 }

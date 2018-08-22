@@ -47,7 +47,7 @@ public class MongoUserServiceTest extends AbstractServiceTest {
     @Test
     public void get() {
         userService.getAll().stream().map(User::getId).forEach(System.out::println);
-        userService.get(vasia.getId());
+        assertEquals(vasia, userService.get(vasia.getId()));
     }
 
     @Test

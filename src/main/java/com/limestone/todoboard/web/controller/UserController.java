@@ -35,8 +35,8 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PutMapping
-    public ResponseEntity updateAccount(@Valid @RequestBody UserTo userTo) {
+    @PostMapping
+    public ResponseEntity updateAccount(@Valid UserTo userTo) {
         LOGGER.info("update account: {}", userTo.getId());
         userService.update(asUser(userTo));
         AuthorizedUser.get().update(userTo);
@@ -50,7 +50,6 @@ public class UserController {
         userService.deleteWithTickets(AuthorizedUser.id());
         AuthenticationUtil.manualLogout(request, response);
 
-        //TODO redirect to login
         return ResponseEntity.noContent().build();
     }
 }

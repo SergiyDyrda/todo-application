@@ -19,9 +19,18 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class TicketTo implements Serializable {
     @SafeHtml
-    private String id, description;
+    private String id;
 
     @SafeHtml
     @NotEmpty
-    private String name, status;
+    private String name;
+
+    @SafeHtml
+    private String description;
+
+
+    @SafeHtml
+    @NotEmpty
+    private String status;
+
 }
