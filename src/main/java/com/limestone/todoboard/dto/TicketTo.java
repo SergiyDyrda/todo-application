@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.SafeHtml;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -22,7 +22,7 @@ public class TicketTo implements Serializable {
     private String id;
 
     @SafeHtml
-    @NotEmpty
+    @NotBlank(message = "name must not be blank")
     private String name;
 
     @SafeHtml
@@ -30,7 +30,7 @@ public class TicketTo implements Serializable {
 
 
     @SafeHtml
-    @NotEmpty
+    @NotBlank(message = "status must not be blank")
     private String status;
 
 }

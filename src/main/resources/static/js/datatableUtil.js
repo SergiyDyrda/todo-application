@@ -1,5 +1,5 @@
 var form;
-var serverUrl = "tickets/";
+var serverUrl = "tickets";
 
 function makeEditable() {
     form = $('#detailsForm');
@@ -12,10 +12,15 @@ function makeEditable() {
 }
 
 function add() {
+    makeEditable();
     $('#modalTitle').html("Add record");
     form.find(":input").val("");
     $('#editRow').modal();
 
+    setTokens()
+}
+
+function setTokens() {
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
     $(document).ajaxSend(function (e, xhr, options) {
@@ -23,41 +28,46 @@ function add() {
     });
 }
 
+// function updateRow(id) {
+//     makeEditable();
+//     $('#modalTitle').html("Edit record");
+//     $.get(serverUrl + '/' + id, function (data) {
+//         $.each(data, function (key, value) {
+//             form.find("input[name='" + key + "']").val(value);
+//         });
+//         $('#editRow').modal();
+//     });
+//     setTokens();
+// }
 function updateRow(id) {
+    makeEditable();
     $('#modalTitle').html("Edit record");
-    $.get(serverUrl + id, function (data) {
+    $.get(serverUrl + '/' + id, function (data) {
         $.each(data, function (key, value) {
             form.find("input[name='" + key + "']").val(value);
+            form.find("textarea[name='" + key + "']").val(value);
+            form.find("select[name='" + key + "']").val(value);
         });
         $('#editRow').modal();
     });
-
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
-    $(document).ajaxSend(function (e, xhr, options) {
-        xhr.setRequestHeader(header, token);
-    });
+    setTokens();
 }
 
 function deleteRow(id) {
+    makeEditable();
+    setTokens();
     $.ajax({
-        url: serverUrl + id,
+        url: serverUrl + "/" + id,
         type: 'DELETE',
         success: function () {
             updateTable();
-            successNoty("Deleted!");
         }
     });
 }
 
 function updateTable() {
     window.location.replace(serverUrl);
-    // $.get(serverUrl, updateTableByData);
 }
-
-// function updateTableByData(data) {
-//     datatableApi.clear().rows.add(data).draw();
-// }
 
 function save() {
     $.ajax({
@@ -67,7 +77,6 @@ function save() {
         success: function () {
             $('#editRow').modal('hide');
             updateTable();
-            successNoty("Saved!");
         }
     });
 }

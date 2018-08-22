@@ -4,15 +4,18 @@ import com.limestone.todoboard.AuthorizedUser;
 import com.limestone.todoboard.domain.Ticket;
 import com.limestone.todoboard.dto.TicketTo;
 import com.limestone.todoboard.service.TicketService;
+import com.limestone.todoboard.util.ExceptionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +81,10 @@ public class TicketController {
     }
 
     @PostMapping
-    public ResponseEntity<TicketTo> createOrUpdateTicket(@Valid TicketTo ticketTo) {
+    public ResponseEntity<TicketTo> createOrUpdateTicket(@Valid TicketTo ticketTo, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new ValidationException(ExceptionUtil.getErrorResponse(bindingResult));
+        }
         Ticket nativeTicket = asTicket(ticketTo);
         if (nativeTicket.isNew()) {
             nativeTicket.setId(null);
