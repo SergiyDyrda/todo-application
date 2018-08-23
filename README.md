@@ -8,7 +8,7 @@ To deploy app you need <a href="http://www.oracle.com/technetwork/pt/java/javase
 ## Running locally
 ```
 	git clone https://github.com/SergiyDyrda/todo-application
-	cd todoboard
+	cd todo-application
 	./mvnw spring-boot:run
 	
 ```
