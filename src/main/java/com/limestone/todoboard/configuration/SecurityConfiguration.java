@@ -47,7 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login").failureUrl("/login?error=true")
-                .defaultSuccessUrl(TICKET_URL)
+                .defaultSuccessUrl(TICKET_URL, true)
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .and()

@@ -32,7 +32,7 @@
         <webjars-noty.version>2.4.1</webjars-noty.version>
         <webjars-datatables.version>1.10.15</webjars-datatables.version>
 
-        <jsoup.version>1.7.2</jsoup.version>
+        <jsoup.version>1.11.3</jsoup.version>
     </properties>
 
     <dependencies>
@@ -139,6 +139,25 @@
         </dependency>
 
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>embedded</id>
+            <dependencies>
+                <dependency>
+                    <groupId>de.flapdoodle.embed</groupId>
+                    <artifactId>de.flapdoodle.embed.mongo</artifactId>
+                </dependency>
+            </dependencies>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>mongo</id>
+        </profile>
+    </profiles>
+
 
     <build>
         <plugins>

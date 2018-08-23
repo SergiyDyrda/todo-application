@@ -28,17 +28,6 @@ function setTokens() {
     });
 }
 
-// function updateRow(id) {
-//     makeEditable();
-//     $('#modalTitle').html("Edit record");
-//     $.get(serverUrl + '/' + id, function (data) {
-//         $.each(data, function (key, value) {
-//             form.find("input[name='" + key + "']").val(value);
-//         });
-//         $('#editRow').modal();
-//     });
-//     setTokens();
-// }
 function updateRow(id) {
     makeEditable();
     $('#modalTitle').html("Edit record");
@@ -54,7 +43,6 @@ function updateRow(id) {
 }
 
 function deleteRow(id) {
-    makeEditable();
     setTokens();
     $.ajax({
         url: serverUrl + "/" + id,
